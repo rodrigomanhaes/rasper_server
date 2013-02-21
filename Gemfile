@@ -2,8 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.12'
 
-gem 'activerecord-jdbcsqlite3-adapter'
-
 gem 'jruby-openssl'
 
 group :assets do
@@ -15,7 +13,10 @@ end
 
 gem 'jquery-rails'
 
+gem 'rasper', '~> 0.1.1'
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'capybara'
+  gem 'pry-rails'
 end
