@@ -17,3 +17,5 @@
 report/
 java/
 *.jasper
+pom.xml
+.ruby-version
