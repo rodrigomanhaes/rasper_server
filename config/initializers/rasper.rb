@@ -1,3 +1,5 @@
-Rasper::JARLoader.jar_dir = Rails.root.join('java')
-Rasper::Report.jasper_dir = Rails.root.join('report')
-Rasper::Report.image_dir = Rails.root.join('report')
+Rasper::Config.configure do |config|
+  config.jar_dir = Rails.root.join('java')
+  config.jasper_dir = Rails.root.join('report')
+  config.image_dir = Rails.root.join('report')
+end
