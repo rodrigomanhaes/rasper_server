@@ -3,15 +3,16 @@ require 'base64'
 class ReportsController < ApplicationController
   respond_to :json
 
-  def create
-    Report.create(params[:report])
+  def add
+    req = JSON.parse(request.body.read).symbolize_keys
+    Report.create(req)
     render json: { success: true }
   end
 
   def generate
-    name = params[:id]
+    req = JSON.parse(request.body.read).symbolize_keys
     content = Base64.encode64(
-      Report.generate(name, params[:data], params[:parameters]))
+      Report.generate(req[:name], req[:data], req[:parameters]))
 #    binding.pry
     render json: { content: content }
   end

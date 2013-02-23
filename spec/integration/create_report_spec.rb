@@ -7,9 +7,8 @@ feature 'create report' do
   end
 
   scenario 'send report to server' do
-    post reports_path, report: {
-      'name' => 'programmers',
-      'content' => File.read(File.join(resources_dir, 'programmers.jrxml')) }
+    post '/add', {}, {'RAW_POST_DATA' => { 'name' => 'programmers',
+      'content' => Base64.encode64(resource('programmers.jrxml')) }.to_json }
     Dir[Rails.root.join('report', 'programmers.*')].map(&:to_s).should =~ \
       %w(programmers.jrxml programmers.jasper).map {|s|
         Rails.root.join('report', s).to_s

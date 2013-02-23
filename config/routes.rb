@@ -1,5 +1,4 @@
 RasperServer::Application.routes.draw do
-  resources :reports, only: [:create] do
-    post :generate, on: :member
-  end
+  match 'add' => 'reports#add', :via => :post
+  match 'generate' => 'reports#generate', :via => :post
 end

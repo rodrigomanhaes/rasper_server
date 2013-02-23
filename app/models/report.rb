@@ -2,7 +2,8 @@ require 'base64'
 
 class Report
   def self.create(options)
-    name, content, images = options[:name], options[:content], options[:images]
+    name, content, images = options.values_at(:name, :content, :images)
+    content = Base64.decode64(content)
     filename = Rails.root.join('report', "#{name}.jrxml")
     File.open(filename, 'w') {|f| f.write(content) }
     images.each do |hash|
