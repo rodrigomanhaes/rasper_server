@@ -13,7 +13,6 @@ class ReportsController < ApplicationController
     req = JSON.parse(request.body.read).symbolize_keys
     content = Base64.encode64(
       Report.generate(req[:name], req[:data], req[:parameters]))
-#    binding.pry
     render json: { content: content }
   end
 end

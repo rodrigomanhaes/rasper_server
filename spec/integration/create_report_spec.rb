@@ -14,4 +14,14 @@ feature 'create report' do
         Rails.root.join('report', s).to_s
       }
   end
+
+  scenario 'send only images(s)' do
+    post '/add', {}, {'RAW_POST_DATA' => {
+      'images' => [{
+        'name' => 'imagem.jpg',
+        'content' =>
+          Base64.encode64(resource('imagem.jpg'))}] }.to_json }
+    Dir[Rails.root.join('report', '*.*')].map {|f| File.basename(f) }.
+      should == ['imagem.jpg']
+  end
 end

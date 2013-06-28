@@ -9,6 +9,11 @@ require 'rspec/autorun'
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
+  config.before :each do
+    [Rasper::Config.jasper_dir, Rasper::Config.image_dir].each do |directory|
+      Dir["#{directory}/*.*"].each {|f| File.delete(f) }
+    end
+  end
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
