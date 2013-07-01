@@ -5,7 +5,7 @@ class Report
     name, content, images = options.values_at(:name, :content, :images)
     if name
       content = Base64.decode64(content)
-      filename = Rails.root.join('report', "#{name}.jrxml")
+      filename = [Rasper::Config.jasper_dir, "#{name}.jrxml"].join('/')
       File.open(filename, 'w') {|f| f.write(content) }
     end
     images.each do |hash|
