@@ -13,7 +13,7 @@ end
 
 gem 'jquery-rails'
 
-gem 'rasper', '~> 0.1.2'
+gem 'rasper', '~> 0.1.3'
 
 group :development, :test do
   gem 'rspec-rails'
