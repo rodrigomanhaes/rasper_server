@@ -19,3 +19,5 @@ java/
 *.jasper
 pom.xml
 .ruby-version
+
+config/initializers/rasper.rb
