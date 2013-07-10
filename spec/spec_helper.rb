@@ -9,6 +9,12 @@ require 'rspec/autorun'
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
+  Rasper::Config.configure do |config|
+    config.jar_dir = Rails.root.join('java')
+    config.jasper_dir = Rails.root.join('report')
+    config.image_dir = Rails.root.join('report')
+  end
+
   config.before :each do
     [Rasper::Config.jasper_dir, Rasper::Config.image_dir].each do |directory|
       Dir["#{directory}/*.*"].each {|f| File.delete(f) }
