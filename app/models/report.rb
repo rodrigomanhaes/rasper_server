@@ -4,7 +4,7 @@ class Report
   def self.create(options)
     name, content, images = options.values_at(:name, :content, :images)
     if name
-      content = Base64.decode64(content)
+      content = Base64.decode64(content).force_encoding('UTF-8')
       filename = [Rasper::Config.jasper_dir, "#{name}.jrxml"].join('/')
       File.open(filename, 'w') {|f| f.write(content) }
     end
