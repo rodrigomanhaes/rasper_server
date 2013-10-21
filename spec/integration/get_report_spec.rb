@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'base64'
 require 'tmpdir'
 
-feature 'create report' do
+feature 'get report' do
   before(:each) do
     post '/add', {}, {'RAW_POST_DATA' => {
       'name' => 'programmers',
@@ -13,8 +13,8 @@ feature 'create report' do
           Base64.encode64(resource('imagem.jpg'))}] }.to_json }
   end
 
-  scenario 'send report to server' do
-    post '/generate', {}, {'RAW_POST_DATA' => {
+  scenario 'generate report' do
+    post_data = Base64.encode64({
       name: 'programmers',
       data: [
         { name: 'Linus', software: 'Linux' },
@@ -25,7 +25,8 @@ feature 'create report' do
         'CITY' => 'Campos dos Goytacazes, Rio de Janeiro, Brazil',
         'DATE' => '02/01/2013'
       }
-    }.to_json }
+    }.to_json)
+    post '/generate', {}, { 'RAW_POST_DATA' => { data: post_data }.to_json }
     pdf_content = Base64.decode64(JSON.parse(response.body)['content'])
     Dir.mktmpdir do |temp_dir|
       pdf_file_name = File.join(temp_dir, "output.pdf")

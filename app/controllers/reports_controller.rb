@@ -10,12 +10,11 @@ class ReportsController < ApplicationController
   end
 
   def generate
-    req = JSON.parse(request.body.read).symbolize_keys
+    encoded_content = JSON.parse(request.body.read)['data']
+    decoded_content = Base64.decode64(encoded_content)
+    req = JSON.parse(decoded_content).symbolize_keys
     content = Base64.encode64(
       Report.generate(req[:name], req[:data], req[:parameters]))
     render json: { content: content }
   end
 end
-
-
-# curl -v -H "Accept: application/json" -H "Content-type: application/json" -X POST -d ' {"data": [{"name": "Linus", "software": "Linux" }, {"name": "Guido", "software": "Python"}], "params": {"DATA": "agora", "LOCAL": "aqui"}}'  http://localhost:3000/reports/programmers
