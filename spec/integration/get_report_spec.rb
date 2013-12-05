@@ -41,4 +41,30 @@ feature 'get report' do
          "Name: Guido", "Software: Python"]
     end
   end
+
+  scenario 'generate report without parameters' do
+    post_data = Base64.encode64({
+      name: 'programmers',
+      data: [
+        { name: 'Linus', software: 'Linux' },
+        { name: 'Yukihiro', software: 'Ruby' },
+        { name: 'Guido', software: 'Python' }
+      ]
+    }.to_json)
+    post '/generate', {}, { 'RAW_POST_DATA' => { data: post_data }.to_json }
+    pdf_content = Base64.decode64(JSON.parse(response.body)['content'])
+    File.open('/tmp/output.pdf', 'wb') {|f| f.write(pdf_content) }
+    Dir.mktmpdir do |temp_dir|
+      pdf_file_name = File.join(temp_dir, "output.pdf")
+      File.open(pdf_file_name, 'wb') {|f| f.write(pdf_content) }
+      Docsplit.extract_text(pdf_file_name, ocr: false, output: temp_dir)
+      output_file_name = File.join(temp_dir, "output.txt")
+      content = File.read(output_file_name)
+      content.lines.reject(&:blank?).map(&:strip).map(&:chomp).should =~ \
+        ["Nowhere, no day",
+         "Name: Linus", "Software: Linux",
+         "Name: Yukihiro", "Software: Ruby",
+         "Name: Guido", "Software: Python"]
+    end
+  end
 end
