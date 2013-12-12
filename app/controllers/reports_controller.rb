@@ -14,7 +14,8 @@ class ReportsController < ApplicationController
     decoded_content = Base64.decode64(encoded_content)
     req = JSON.parse(decoded_content).symbolize_keys
     content = Base64.encode64(
-      Report.generate(req[:name], req[:data], req[:parameters]))
+      Report.generate(req[:name], req[:data],
+        req[:parameters] == nil ? {} : req[:parameters]))
     render json: { content: content }
   end
 end

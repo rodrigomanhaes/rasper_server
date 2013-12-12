@@ -9,6 +9,10 @@ require 'rspec/autorun'
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
+  %w(report java).
+    map {|dir| Rails.root.join(dir) }.
+    each {|dir| Dir.mkdir(dir) unless File.exists?(dir) }
+
   Rasper::Config.configure do |config|
     config.jar_dir = Rails.root.join('java')
     config.jasper_dir = Rails.root.join('report')
