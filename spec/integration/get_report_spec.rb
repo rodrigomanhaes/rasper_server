@@ -1,8 +1,8 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'base64'
 require 'tmpdir'
 
-feature 'get report' do
+RSpec.describe 'get report', type: :request do
   before(:each) do
     post '/add', {}, {'RAW_POST_DATA' => {
       'name' => 'programmers',
@@ -13,7 +13,7 @@ feature 'get report' do
           Base64.encode64(resource('imagem.jpg'))}] }.to_json }
   end
 
-  scenario 'generate report' do
+  it 'generates report' do
     post_data = Base64.encode64({
       name: 'programmers',
       data: [
@@ -34,15 +34,15 @@ feature 'get report' do
       Docsplit.extract_text(pdf_file_name, ocr: false, output: temp_dir)
       output_file_name = File.join(temp_dir, "output.txt")
       content = File.read(output_file_name)
-      content.lines.reject(&:blank?).map(&:strip).map(&:chomp).should =~ \
-        ["Campos dos Goytacazes, Rio de Janeiro, Brazil, 02/01/2013",
-         "Name: Linus", "Software: Linux",
-         "Name: Yukihiro", "Software: Ruby",
-         "Name: Guido", "Software: Python"]
+      expect(content.lines.reject(&:blank?).map(&:strip).map(&:chomp)).to eq [
+        "Campos dos Goytacazes, Rio de Janeiro, Brazil, 02/01/2013",
+        "Name: Linus", "Software: Linux",
+        "Name: Yukihiro", "Software: Ruby",
+        "Name: Guido", "Software: Python"]
     end
   end
 
-  scenario 'generate report without parameters' do
+  it 'generates report without parameters' do
     post_data = Base64.encode64({
       name: 'programmers',
       data: [
@@ -60,11 +60,11 @@ feature 'get report' do
       Docsplit.extract_text(pdf_file_name, ocr: false, output: temp_dir)
       output_file_name = File.join(temp_dir, "output.txt")
       content = File.read(output_file_name)
-      content.lines.reject(&:blank?).map(&:strip).map(&:chomp).should =~ \
-        ["Nowhere, no day",
-         "Name: Linus", "Software: Linux",
-         "Name: Yukihiro", "Software: Ruby",
-         "Name: Guido", "Software: Python"]
+      expect(content.lines.reject(&:blank?).map(&:strip).map(&:chomp)).to match_array [
+        "Nowhere, no day",
+        "Name: Linus", "Software: Linux",
+        "Name: Yukihiro", "Software: Ruby",
+        "Name: Guido", "Software: Python"]
     end
   end
 end
