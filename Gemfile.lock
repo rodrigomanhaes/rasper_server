@@ -38,7 +38,6 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.4.0)
     arel (6.0.3)
-    bouncy-castle-java (1.5.0147)
     builder (3.2.2)
     capybara (2.6.2)
       addressable
@@ -63,8 +62,7 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     jruby-jars (1.7.24)
-    jruby-openssl (0.9.4)
-      bouncy-castle-java (>= 1.5.0147)
+    jruby-openssl (0.9.6-java)
     jruby-rack (1.1.20)
     json (1.8.3)
     json (1.8.3-java)
@@ -118,7 +116,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (11.1.1)
-    rasper (0.1.4)
+    rasper (0.1.5)
       activesupport
       builder
       rake
@@ -186,10 +184,10 @@ DEPENDENCIES
   capybara
   docsplit
   jquery-rails (~> 4.1.1)
-  jruby-openssl
+  jruby-openssl (~> 0.9.6)
   pry-rails
   rails (= 4.2.6)
-  rasper (~> 0.1.4)
+  rasper (~> 0.1.5)
   responders
   rspec-rails
   sass-rails (~> 5.0.4)

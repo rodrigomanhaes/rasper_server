@@ -15,6 +15,20 @@ RSpec.describe 'create report', type: :request do
       }
   end
 
+  it 'puts files into namespaces when provided' do
+    post '/add', {}, {'RAW_POST_DATA' => { 'name' => 'my-awesome-app/programmers',
+      'content' => Base64.encode64(resource('programmers.jrxml')),
+      'images' => [{
+        'name' => 'my-awesome-app/imagem.jpg',
+        'content' => Base64.encode64(resource('imagem.jpg'))}] }.to_json }
+    dirname = Rails.root.join('report', 'my-awesome-app')
+    filenames = Dir[File.join(dirname, '*.*')].map(&:to_s)
+    expect(filenames).to match_array \
+      %w(programmers.jrxml programmers.jasper imagem.jpg).map {|s|
+        File.join(dirname , s).to_s
+      }
+  end
+
   it 'sends only images(s)' do
     post '/add', {}, {'RAW_POST_DATA' => {
       'images' => [{
