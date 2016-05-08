@@ -10,12 +10,12 @@ class ReportsController < ApplicationController
   end
 
   def generate
-    encoded_content = JSON.parse(request.body.read)['data']
+    encoded_content = JSON.parse(params[:datafile].read)['data']
     decoded_content = Base64.decode64(encoded_content)
     req = JSON.parse(decoded_content).symbolize_keys
-    content = Base64.encode64(
-      Report.generate(req[:name], req[:data],
-        req[:parameters] == nil ? {} : req[:parameters]))
+    report = Report.generate(req[:name], req[:data],
+      req[:parameters] == nil ? {} : req[:parameters])
+    content = Base64.encode64(report)
     render json: { content: content }
   end
 end
