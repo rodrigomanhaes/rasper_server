@@ -13,7 +13,7 @@ end
 
 gem 'jquery-rails'
 
-gem 'rasper', '~> 0.1.4'
+gem 'rasper', '~> 0.1.6'
 gem 'warbler', '~> 2.0.0'
 
 group :test do
