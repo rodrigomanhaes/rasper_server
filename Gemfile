@@ -14,9 +14,9 @@ end
 gem 'jquery-rails'
 
 gem 'rasper', '~> 0.1.4'
-gem 'warbler'
+gem 'warbler', '~> 2.0.0'
 
-group :development, :test do
+group :test do
   gem 'rspec-rails'
   gem 'capybara'
   gem 'pry-rails'
