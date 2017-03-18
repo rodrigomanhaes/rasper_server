@@ -1,4 +1,5 @@
 require 'base64'
+require 'fileutils'
 
 class Report
   def self.create(options)
@@ -6,6 +7,7 @@ class Report
     if name
       content = Base64.decode64(content).force_encoding('UTF-8')
       filename = [Rasper::Config.jasper_dir, "#{name}.jrxml"].join('/')
+      FileUtils.mkdir_p(File.dirname(filename))
       File.open(filename, 'w') {|f| f.write(content) }
     end
     images.each do |hash|
