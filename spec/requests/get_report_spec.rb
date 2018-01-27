@@ -1,19 +1,20 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'base64'
 require 'tmpdir'
 
-feature 'get report' do
+RSpec.describe 'get report', type: :request do
   before(:each) do
-    post '/add', {}, {'RAW_POST_DATA' => {
+    post '/add', params: {
       'name' => 'programmers',
       'content' => Base64.encode64(resource('programmers.jrxml')),
       'images' => [{
         'name' => 'imagem.jpg',
-        'content' =>
-          Base64.encode64(resource('imagem.jpg'))}] }.to_json }
+        'content' => Base64.encode64(resource('imagem.jpg'))
+      }]
+    }.to_json
   end
 
-  scenario 'generate report' do
+  it 'generates report' do
     post_data = Base64.encode64({
       name: 'programmers',
       data: [
@@ -26,7 +27,8 @@ feature 'get report' do
         'DATE' => '02/01/2013'
       }
     }.to_json)
-    post '/generate', {}, { 'RAW_POST_DATA' => { data: post_data }.to_json }
+    post '/generate', params: { data: post_data }.to_json
+
     pdf_content = Base64.decode64(JSON.parse(response.body)['content'])
     Dir.mktmpdir do |temp_dir|
       pdf_file_name = File.join(temp_dir, "output.pdf")
@@ -34,15 +36,17 @@ feature 'get report' do
       Docsplit.extract_text(pdf_file_name, ocr: false, output: temp_dir)
       output_file_name = File.join(temp_dir, "output.txt")
       content = File.read(output_file_name)
-      content.lines.reject(&:blank?).map(&:strip).map(&:chomp).should =~ \
-        ["Campos dos Goytacazes, Rio de Janeiro, Brazil, 02/01/2013",
-         "Name: Linus", "Software: Linux",
-         "Name: Yukihiro", "Software: Ruby",
-         "Name: Guido", "Software: Python"]
+      expect(content.lines.reject(&:blank?).map(&:strip).map(&:chomp)).
+        to match_array [
+          "Campos dos Goytacazes, Rio de Janeiro, Brazil, 02/01/2013",
+          "Name: Linus", "Software: Linux",
+          "Name: Yukihiro", "Software: Ruby",
+          "Name: Guido", "Software: Python"
+        ]
     end
   end
 
-  scenario 'generate report without parameters' do
+  it 'generates report without parameters' do
     post_data = Base64.encode64({
       name: 'programmers',
       data: [
@@ -51,7 +55,8 @@ feature 'get report' do
         { name: 'Guido', software: 'Python' }
       ]
     }.to_json)
-    post '/generate', {}, { 'RAW_POST_DATA' => { data: post_data }.to_json }
+    post '/generate', params: { data: post_data }.to_json
+
     pdf_content = Base64.decode64(JSON.parse(response.body)['content'])
     File.open('/tmp/output.pdf', 'wb') {|f| f.write(pdf_content) }
     Dir.mktmpdir do |temp_dir|
@@ -60,11 +65,13 @@ feature 'get report' do
       Docsplit.extract_text(pdf_file_name, ocr: false, output: temp_dir)
       output_file_name = File.join(temp_dir, "output.txt")
       content = File.read(output_file_name)
-      content.lines.reject(&:blank?).map(&:strip).map(&:chomp).should =~ \
-        ["Nowhere, no day",
-         "Name: Linus", "Software: Linux",
-         "Name: Yukihiro", "Software: Ruby",
-         "Name: Guido", "Software: Python"]
+      expect(content.lines.reject(&:blank?).map(&:strip).map(&:chomp)).
+        to match_array [
+          "Nowhere, no day",
+          "Name: Linus", "Software: Linux",
+          "Name: Yukihiro", "Software: Ruby",
+          "Name: Guido", "Software: Python"
+        ]
     end
   end
 end

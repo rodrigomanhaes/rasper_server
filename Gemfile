@@ -1,24 +1,24 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.12'
+git_source(:github) do |repo_name|
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  "https://github.com/#{repo_name}.git"
+end
+
+gem 'rails', '~> 5.1.4'
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'jruby-openssl'
 
-group :assets do
-  gem 'sass-rails', '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
-  gem 'therubyrhino'
-  gem 'uglifier', '>= 1.0.3'
+gem 'rasper'
+gem 'warbler'
+
+group :development do
+  gem 'listen'
 end
-
-gem 'jquery-rails'
-
-gem 'rasper', '~> 0.1.6'
-gem 'warbler', '~> 2.0.0'
 
 group :test do
   gem 'rspec-rails'
-  gem 'capybara'
   gem 'pry-rails'
   gem 'docsplit'
 end

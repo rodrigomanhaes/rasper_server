@@ -19,5 +19,8 @@ java/
 *.jasper
 pom.xml
 .ruby-version
+.tool-versions
 
 config/initializers/rasper.rb
+config/initializers/rack_space_limit.rb
+.rspec

@@ -1,8 +1,6 @@
 require 'base64'
 
 class ReportsController < ApplicationController
-  respond_to :json
-
   def add
     req = JSON.parse(request.body.read).symbolize_keys
     Report.create(req)
