@@ -5,6 +5,8 @@ class ReportsController < ApplicationController
     req = JSON.parse(request.body.read).symbolize_keys
     Report.create(req)
     render json: { success: true }
+  rescue Exception => e
+    handle_exception(e)
   end
 
   def generate
@@ -15,5 +17,19 @@ class ReportsController < ApplicationController
       Report.generate(req[:name], req[:data],
         req[:parameters] == nil ? {} : req[:parameters]))
     render json: { content: content }
+  end
+
+  private
+
+  def handle_exception(e)
+    if e.respond_to?(:java_class) && e.java_class.present?
+      render \
+        json: {
+          success: false, exception: e.java_class.to_s, message: e.message
+        },
+        status: 500
+    else
+      render json: { success: false }, status: 500
+    end
   end
 end
